@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 224 71% 4%;
+    --foreground: 213 31% 91%;
+
+    --card: 224 71% 6%;
+    --card-foreground: 213 31% 91%;
+
+    --popover: 224 71% 6%;
+    --popover-foreground: 213 31% 91%;
+
+    --primary: 262 80% 65%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 222 47% 11%;
+    --secondary-foreground: 213 31% 91%;
+
+    --muted: 223 47% 11%;
+    --muted-foreground: 215 20% 55%;
+
+    --accent: 222 47% 14%;
+    --accent-foreground: 213 31% 91%;
+
+    --destructive: 0 63% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 216 34% 14%;
+    --input: 216 34% 14%;
+    --ring: 262 80% 65%;
+
+    --radius: 0.75rem;
+
+    /* Solana brand gradient */
+    --gradient-from: 157 100% 49%;
+    --gradient-to: 262 80% 65%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  /* Remove number input spinners */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+}
+
+@layer utilities {
+  .gradient-text {
+    @apply bg-gradient-to-r from-[hsl(157,100%,49%)] to-[hsl(262,80%,65%)] bg-clip-text text-transparent;
+  }
+  .card-glow {
+    box-shadow: 0 0 0 1px hsl(var(--border)), 0 4px 24px -4px rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* Smooth refresh spin */
+@keyframes spin-smooth {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+/* One-shot kick: rotates 360° once with ease-in-out, then hands off to the loop */
+@keyframes spin-once {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.spin-smooth {
+  animation: spin-smooth 0.7s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+/* Idle: no transform at all — avoids any snap when switching to spin */
+.refresh-idle {
+  transition: opacity 0.15s ease;
+}
+
+/* Wallet adapter modal — match our dark theme */
+.wallet-adapter-modal-wrapper {
+  background: hsl(var(--card)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  border-radius: var(--radius) !important;
+}
+.wallet-adapter-modal-title {
+  color: hsl(var(--foreground)) !important;
+}
+.wallet-adapter-button-trigger {
+  background: hsl(var(--primary)) !important;
+}

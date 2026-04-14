@@ -80,21 +80,6 @@ toolkit/
 
 ---
 
-## Pushing to GitHub (for judges)
-
-```bash
-# From the repo root
-git init
-git add .
-git commit -m "feat: solana frontend course + starter template"
-git remote add origin https://github.com/YOUR_ORG/solana-frontend-course.git
-git push -u origin main
-```
-
-> `node_modules/`, `.next/`, and `.env.local` are excluded by `.gitignore` — safe to push as-is.
-
----
-
 ## Lecture resources
 
 Each lecture links to the starter template and extends it:

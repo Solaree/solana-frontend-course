@@ -17,8 +17,6 @@ Build a complete token transfer interface that lets users send SOL and SPL token
 
 ## Requirements
 
-### Core (required for passing)
-
 1. **Send SOL form** with:
    - Validated recipient address (must be a valid base58 public key)
    - Amount input with max button (sets amount to current balance minus fee buffer)
@@ -31,6 +29,8 @@ Build a complete token transfer interface that lets users send SOL and SPL token
    - "Confirmed" with an explorer link (new tab, correct cluster)
    - Error message for failed transactions (human-readable, not raw error codes)
 
+---
+
 3. **User rejection handling** — if the user rejects in their wallet, return to idle state without showing an error
 
 4. **Priority fee toggle** — "Fast" / "Normal" radio or toggle that adds/removes a compute unit price instruction
@@ -39,6 +39,8 @@ Build a complete token transfer interface that lets users send SOL and SPL token
    - Whether the simulation succeeded
    - Estimated compute units
    - "Transaction looks good — proceed?" confirmation
+
+---
 
 ### Stretch goals
 
@@ -83,6 +85,8 @@ const estimatedCU = sim.value.unitsConsumed ?? 0;
 const safeLimit = Math.ceil(estimatedCU * 1.1);
 ```
 
+---
+
 ### SPL token transfer instruction
 
 ```ts
@@ -125,6 +129,11 @@ tx.add(createTransferInstruction(
 | User rejection → silent idle | 15 | No error toast, no console warning |
 | Priority fee toggle works | 10 | Adds/removes ComputeBudget instruction |
 | Simulate button works | 15 | Shows CU estimate, success/fail |
+
+---
+
+| Criterion | Points | Notes |
+|-----------|--------|-------|
 | No TypeScript errors | 10 | `pnpm build` passes |
 | Accessibility: labels on all inputs | 5 | `<label>` + `aria-describedby` for errors |
 | `pnpm build` produces no type errors | 5 | |

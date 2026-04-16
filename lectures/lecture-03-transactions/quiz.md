@@ -109,6 +109,11 @@ marp: true
 | 3 | **C** | User rejection is not an error — catch `WalletSignTransactionError` and return to idle state. Never show an error toast. |
 | 4 | **B** | Simulation is a dry run — shows logs, expected outcome, and CU cost without committing to the chain. |
 | 5 | **B** | Address Lookup Tables allow v0 transactions to reference more accounts by storing common addresses in a compressed form. |
+
+---
+
+| Q | Answer | Explanation |
+|---|--------|-------------|
 | 6 | **C** | `@coral-xyz/anchor` is the current, maintained Anchor client. |
 | 7 | **B** | `setComputeUnitLimit` caps the compute usage. Transactions that don't declare a limit are given the max (1.4M CUs) — wasteful and deprioritized. |
 | 8 | **D** | Solana accounts must maintain a rent-exempt minimum balance. A transfer that would drain below it is rejected. Both the sender's token account balance and the fee can trigger this. |

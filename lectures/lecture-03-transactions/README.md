@@ -642,4 +642,4 @@ const sig = await connection.sendRawTransaction(signed.serialize());
 
 ---
 
-**Next:** [Lecture 4 — Production-Ready dApps](../lecture-04-production/README.md)
+**Next:** [Lecture 4 — Production-Ready dApps](../lecture-04-production/README.pdf)

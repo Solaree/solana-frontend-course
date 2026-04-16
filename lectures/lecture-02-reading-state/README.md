@@ -545,4 +545,4 @@ const accounts = await connection.getMultipleAccountsInfo([
 
 ---
 
-**Next:** [Lecture 3 — Building & Sending Transactions](../lecture-03-transactions/README.md)
+**Next:** [Lecture 3 — Building & Sending Transactions](../lecture-03-transactions/README.pdf)

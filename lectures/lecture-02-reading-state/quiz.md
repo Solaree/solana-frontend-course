@@ -1,3 +1,7 @@
+---
+marp: true
+---
+
 # Lecture 2 Quiz — Reading Blockchain State & Token Data
 
 10 questions. Recommended time: 15 minutes.
@@ -92,13 +96,10 @@
 ```ts
 // A
 queryKey: ["solBalance"]
-
 // B
 queryKey: ["solBalance", publicKey?.toBase58()]
-
 // C
 queryKey: ["solBalance", connection.rpcEndpoint]
-
 // D
 queryKey: ["balance", "sol", Date.now()]
 ```
@@ -118,6 +119,11 @@ queryKey: ["balance", "sol", Date.now()]
 | 2 | **B** | ATA = deterministic address from (owner, mint). Every program can find your token balance without you revealing the address. |
 | 3 | **B** | Always call `removeAccountChangeListener(subId)` in the cleanup function — unmanaged subscriptions leak WebSocket connections. |
 | 4 | **C** | `staleTime` — how long before React Query considers data stale and eligible for a background refetch. `gcTime` (formerly `cacheTime`) controls how long unused data stays in memory. |
+
+---
+
+| Q | Answer | Explanation |
+|---|--------|-------------|
 | 5 | **C** | `getMultipleAccountsInfo` fetches N accounts in a single RPC call. `Promise.all` makes N parallel calls — still N round trips. |
 | 6 | **C** | Token accounts persist even when emptied. Wallets accumulate hundreds of dust accounts. Filter them for a clean UI. |
 | 7 | **B** | 1,500,000,000 / 10^9 = 1.5 |

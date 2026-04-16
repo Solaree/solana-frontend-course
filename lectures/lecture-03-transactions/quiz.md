@@ -1,3 +1,7 @@
+---
+marp: true
+---
+
 # Lecture 3 Quiz — Building & Sending Transactions
 
 10 questions. Recommended time: 15 minutes.

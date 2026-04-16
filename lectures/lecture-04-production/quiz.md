@@ -1,3 +1,7 @@
+---
+marp: true
+---
+
 # Lecture 4 Quiz — Production-Ready dApps
 
 10 questions. Recommended time: 15 minutes.

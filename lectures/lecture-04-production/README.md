@@ -1,3 +1,7 @@
+---
+marp: true
+---
+
 # Lecture 4 — Production-Ready dApps
 
 **Duration:** ~90 minutes  

@@ -71,7 +71,11 @@ Your Wallet (7xKX...)
     └── Token Account for JUP  (different address)
 ```
 
+---
+
 The **associated token account (ATA)** is the canonical token account derived from `(owner, mint)`. It always exists at the same deterministic address, so programs can find your token balance without you telling them where it is.
+
+---
 
 ### Fetching all token accounts
 
@@ -120,6 +124,13 @@ Raw token accounts only give you the mint address — not the name, symbol, or l
 
 Helius's Digital Asset Standard (DAS) API returns rich metadata in a single call:
 
+<!-- _class: small-code -->
+<style>
+section.small-code pre {
+  font-size: 0.47em;
+}
+</style>
+
 ```ts
 async function getTokensWithMetadata(owner: string) {
   const response = await fetch(process.env.NEXT_PUBLIC_RPC_URL!, {
@@ -142,33 +153,43 @@ async function getTokensWithMetadata(owner: string) {
 }
 ```
 
-### Option B — Jupiter Token List (simple, no API key)
+---
+
+### Option B — Jupiter API (simple, no API key)
 
 ```ts
-// Cache this — it's a big list
-const TOKEN_LIST_URL = "https://token.jup.ag/strict";
+const JUP_API = "https://api.jup.ag/tokens/v2/search";
 
 interface JupiterToken {
-  address: string;
+  id: string;        // mint address
   name: string;
   symbol: string;
   decimals: number;
-  logoURI: string;
+  icon: string;
 }
 
-let tokenListCache: Map<string, JupiterToken> | null = null;
-
-async function getTokenList(): Promise<Map<string, JupiterToken>> {
-  if (tokenListCache) return tokenListCache;
-  const res = await fetch(TOKEN_LIST_URL);
-  const tokens: JupiterToken[] = await res.json();
-  tokenListCache = new Map(tokens.map((t) => [t.address, t]));
-  return tokenListCache;
-}
+const tokenCache = new Map<string, JupiterToken>();
 
 async function enrichToken(mint: string) {
-  const list = await getTokenList();
-  return list.get(mint) ?? { name: "Unknown", symbol: mint.slice(0, 4), logoURI: "" };
+  if (tokenCache.has(mint)) return tokenCache.get(mint)!;
+
+  try {
+    const res = await fetch(`${JUP_API}?query=${mint}`);
+    const data: JupiterToken[] = await res.json();
+
+    const token = data.find((t) => t.id === mint);
+
+    if (token) {
+      tokenCache.set(mint, token);
+      return token;
+    }
+  } catch {}
+
+  return {
+    name: "Unknown",
+    symbol: mint.slice(0, 4),
+    icon: "",
+  };
 }
 ```
 
@@ -183,6 +204,8 @@ async function enrichToken(mint: string) {
 | `onAccountChange` | ~400 ms | Low (1 sub per account) | Single account monitoring |
 | `onProgramAccountChange` | ~400 ms | Medium | Watching a program's state |
 | Polling (`setInterval`) | ≥ poll interval | RPC calls | Simple balance refresh |
+
+---
 
 ### Subscribing to account changes
 
@@ -219,6 +242,8 @@ export function useAccountSubscription(
   }, [publicKey?.toBase58(), connection]);
 }
 ```
+
+---
 
 ### Live SOL balance hook with React Query & Subscription
 
@@ -285,6 +310,8 @@ export function useTokenPrices(mints: string[] = []) {
 }
 ```
 
+---
+
 Managing loading/error/refetch state manually with `useState` doesn't scale. Use `@tanstack/react-query`:
 
 ```bash
@@ -293,6 +320,17 @@ pnpm add @tanstack/react-query
 
 ### Setup
 
+<!-- _class: small-code -->
+<style>
+pre code.language-bash {
+  font-size: 22px;
+  font-weight: 600;
+}
+section.small-code pre:has(code.language-ts),
+section.small-code pre:has(code.language-tsx) {
+  font-size: 0.48em;
+}
+</style>
 ```tsx
 // src/components/providers/query-provider.tsx
 "use client";
@@ -318,6 +356,8 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
 }
 ```
 
+---
+
 ### SOL balance with React Query
 
 ```tsx
@@ -342,6 +382,8 @@ export function useSolBalanceQuery() {
   });
 }
 ```
+
+---
 
 ### Token accounts with React Query
 
@@ -480,6 +522,8 @@ const accounts = await connection.getMultipleAccountsInfo([
 ]);
 // Returns 3 results in 1 RPC round trip
 ```
+
+---
 
 ### Avoiding `getProgramAccounts` in production
 

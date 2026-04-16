@@ -1,3 +1,7 @@
+---
+marp: true
+---
+
 # Assignment 3 — Token Transfer dApp
 
 **Estimated time:** 90–120 minutes  

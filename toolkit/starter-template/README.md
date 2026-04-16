@@ -120,12 +120,12 @@ const program = getProgram(connection, wallet);
 await program.methods.myInstruction(arg).accounts({ ... }).rpc();
 ```
 
-### Switch to mainnet
+### Switch to devnet
 
 ```bash
 # .env.local
-NEXT_PUBLIC_CLUSTER=mainnet-beta
-NEXT_PUBLIC_RPC_URL=https://mainnet.helius-rpc.com/?api-key=YOUR_KEY
+NEXT_PUBLIC_CLUSTER=devnet
+NEXT_PUBLIC_RPC_URL=https://devnet.helius-rpc.com/?api-key=YOUR_KEY
 ```
 
 The cluster badge disappears automatically on mainnet.

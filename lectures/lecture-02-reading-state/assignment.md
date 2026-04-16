@@ -1,3 +1,7 @@
+---
+marp: true
+---
+
 # Assignment 2 — Token Portfolio Dashboard
 
 **Estimated time:** 90–120 minutes  
@@ -21,21 +25,23 @@ Build a portfolio dashboard that displays a wallet's complete token holdings wit
    - Skeleton loading state while fetching (card-shaped, 4 rows)
    - Empty state: "No tokens yet" with description
    - Error state with retry
-
 2. **SOL balance** with live subscription:
    - Use `connection.onAccountChange` (not polling)
    - Show a subtle "live" badge/indicator when subscribed
    - Balance updates without a page refresh when you send/receive SOL
 
+---
+
 3. **Transaction history** (last 10 signatures):
    - Signature truncated with link to explorer
    - Timestamp formatted as relative time ("2 minutes ago")
    - Error/slot indicator (success/fail badge)
-
 4. **React Query** integration:
    - All RPC calls go through `useQuery`
    - Manual refresh button that calls `refetch()`
    - Show "last updated X seconds ago" timestamp
+
+---
 
 ### Stretch goals
 
@@ -118,6 +124,8 @@ export function formatRelativeTime(unixSeconds: number): string {
 }
 ```
 
+---
+
 ### Subscription cleanup pattern
 
 ```ts
@@ -144,6 +152,11 @@ useEffect(() => {
 | Error state with retry | 8 | Inline, actionable |
 | SOL balance uses subscription | 15 | `onAccountChange`, not polling |
 | Transaction history with explorer links | 12 | Correct cluster, new tab |
+
+---
+
+| Criterion | Points | Notes |
+|-----------|--------|-------|
 | React Query used for all fetches | 10 | No raw `useState` + `useEffect` fetching |
 | Manual refresh works | 5 | Calls `refetch()`, disables during load |
 | Address component with copy | 7 | With "Copied!" confirmation |

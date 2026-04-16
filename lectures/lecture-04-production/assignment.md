@@ -1,3 +1,7 @@
+---
+marp: true
+---
+
 # Assignment 4 — Production-Ready Wallet App
 
 **Estimated time:** 2–3 hours  

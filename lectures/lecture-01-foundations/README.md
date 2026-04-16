@@ -197,11 +197,7 @@ import "@solana/wallet-adapter-react-ui/styles.css";
 interface Props {
   children: React.ReactNode;
 }
-```
 
----
-
-```ts
 export function SolanaProvider({ children }: Props) {
   const network = WalletAdapterNetwork.Devnet;
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
@@ -369,11 +365,7 @@ export function WalletButton() {
       </Button>
     );
   }
-```
 
----
-
-```tsx
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -589,4 +581,4 @@ export default function Home() {
 
 ---
 
-**Next:** [Lecture 2 — Reading Blockchain State & Token Data](../lecture-02-reading-state/README.md)
+**Next:** [Lecture 2 — Reading Blockchain State & Token Data](../lecture-02-reading-state/README.pdf)

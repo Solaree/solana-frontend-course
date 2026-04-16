@@ -4,7 +4,7 @@ export interface SwapToken {
   decimals: number;
 }
 
-/** Popular tokens on Solana — extend as needed. */
+/** Popular tokens on Solana — extend as needed (for mainnet mostly). */
 export const SWAP_TOKENS: SwapToken[] = [
   { symbol: "SOL", mint: "So11111111111111111111111111111111111111112", decimals: 9 },
   { symbol: "USDC", mint: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", decimals: 6 },
@@ -38,7 +38,7 @@ export async function preloadTokenIcons(mints: string[]) {
   const promises = mints.map(async (mint) => {
     if (tokenIconCache.has(mint)) return;
     try {
-      const res = await fetch(`https://lite-api.jup.ag/tokens/v2/search?query=${mint}`);
+      const res = await fetch(`https://api.jup.ag/tokens/v2/search?query=${mint}`);
       const data = await res.json();
       const token = data.find((t: any) => t.id === mint);
       if (token?.icon) tokenIconCache.set(mint, token.icon);

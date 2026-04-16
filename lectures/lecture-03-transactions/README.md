@@ -1,3 +1,7 @@
+---
+marp: true
+---
+
 # Lecture 3 — Building & Sending Transactions
 
 **Duration:** ~90 minutes  

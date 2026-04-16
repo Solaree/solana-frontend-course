@@ -1,3 +1,7 @@
+---
+marp: true
+---
+
 # Lecture 1 Quiz — Solana Frontend Foundations
 
 10 questions. Recommended time: 15 minutes. Answers at the bottom — try on your own first.
@@ -83,13 +87,10 @@
 ```ts
 // A
 address.substring(0, 8)
-
 // B
 address.slice(0, 4) + "..." + address.slice(-4)
-
 // C
 address.split("").reverse().join("").slice(0, 8)
-
 // D
 address.replace(/(.{4}).*(.{4})/, "$1...$2")
 ```
@@ -120,6 +121,11 @@ address.replace(/(.{4}).*(.{4})/, "$1...$2")
 | 4 | **C** | SOL lives in an account at your public key address, owned by the System Program |
 | 5 | **B** | Without `useMemo`, a new array reference triggers reconnect loops in the adapter |
 | 6 | **C** | `useConnection()` returns `{ connection }` |
+
+---
+
+| Q | Answer | Explanation |
+|---|--------|-------------|
 | 7 | **C** | Wallet adapter hooks use browser APIs (`window`, `navigator`) that aren't available on the server |
 | 8 | **B** | `publicKey` is `null` when no wallet is connected — always null-check before use |
 | 9 | **B** | `address.slice(0, 4) + "..." + address.slice(-4)` is clear and correct |

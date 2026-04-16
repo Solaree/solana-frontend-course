@@ -15,42 +15,75 @@ import { CLUSTER } from "@/lib/solana";
 export function AirdropButton() {
   const { publicKey, connected } = useWallet();
   const queryClient = useQueryClient();
+
   const [loading, setLoading] = useState(false);
+  const [lastDrop, setLastDrop] = useState(0);
 
   if (CLUSTER === "mainnet-beta" || !connected || !publicKey) return null;
 
   async function handleAirdrop() {
     if (!publicKey || loading) return;
 
+    // simple anti-spam (10s)
+    if (Date.now() - lastDrop < 10000) {
+      toast.error("Wait a few seconds before retrying");
+      return;
+    }
+
+    const address = publicKey.toBase58();
     setLoading(true);
+    setLastDrop(Date.now());
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
 
     try {
       const res = await fetch("/api/airdrop", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ address: publicKey.toBase58() }),
+        body: JSON.stringify({ address }),
+        signal: controller.signal,
       });
 
-      const data = await res.json();
+      let data: any;
+      try {
+        data = await res.json();
+      } catch {
+        throw new Error("Invalid server response");
+      }
 
       if (!res.ok) {
-        throw new Error(data.error || "Airdrop failed");
+        // prefer structured errors
+        if (data?.error === "RATE_LIMITED") {
+          throw new Error("RATE_LIMITED");
+        }
+        throw new Error(data?.error || "Airdrop failed");
       }
 
       queryClient.invalidateQueries({
-        queryKey: ["solBalance", publicKey.toBase58()],
+        queryKey: ["solBalance", address],
       });
 
-      toast.success("Airdrop successful — 1 SOL received!");
+      toast.success(
+        `Airdrop successful — ${data?.amount ?? 1} SOL received!`
+      );
     } catch (err: any) {
+      if (err.name === "AbortError") {
+        toast.error("Request timed out. Try again.");
+        return;
+      }
+
       const msg = err?.message || "";
 
-      if (msg.includes("rate") || msg.includes("429") || msg.includes("faucet")) {
-        toast.error("All faucets rate-limited. Try again in a few minutes or use Faucet (https://faucet.solana.com)");
+      if (msg === "RATE_LIMITED") {
+        toast.error(
+          "All faucets rate-limited. Try again in a few minutes or use https://faucet.solana.com"
+        );
       } else {
         toast.error(msg || "Airdrop failed");
       }
     } finally {
+      clearTimeout(timeout);
       setLoading(false);
     }
   }
@@ -68,7 +101,10 @@ export function AirdropButton() {
       ) : (
         <Droplets className="h-4 w-4" aria-hidden />
       )}
-      {loading ? "Airdropping…" : "Airdrop 1 SOL"}
+
+      <span aria-live="polite">
+        {loading ? "Airdropping…" : "Airdrop 1 SOL"}
+      </span>
     </button>
   );
 }

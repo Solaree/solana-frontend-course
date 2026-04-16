@@ -1,3 +1,7 @@
+---
+marp: true
+---
+
 # Assignment 1 — Wallet Dashboard
 
 **Estimated time:** 60–90 minutes  
@@ -25,6 +29,8 @@ Build a single-page wallet dashboard that connects to a Solana wallet and displa
    - View on Solana Explorer (opens in new tab, respects devnet)
    - Disconnect
 
+---
+
 3. **SOL balance card** with:
    - Skeleton loading state
    - Error state with retry button
@@ -32,6 +38,8 @@ Build a single-page wallet dashboard that connects to a Solana wallet and displa
    - Refresh button
 
 4. **Network indicator** — display which cluster you're connected to (devnet/mainnet)
+
+---
 
 ### Stretch goals (for distinction)
 
@@ -87,6 +95,11 @@ src/
 | Balance skeleton on load | 10 | No layout shift |
 | Error state with retry | 10 | Visible, actionable |
 | Network indicator | 5 | Shows current cluster |
+
+---
+
+| Criterion | Points | Notes |
+|-----------|--------|-------|
 | Code quality | 10 | No magic numbers, no hardcoded colors |
 | No TypeScript errors | 5 | `pnpm build` must succeed |
 | **Total** | **100** | |

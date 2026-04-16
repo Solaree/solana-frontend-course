@@ -94,7 +94,7 @@ npx playwright install chromium
 
 ```bash
 # Solana RPC
-# Get a free API key at https://helius.xyz
+# Get a free API key at https://helius.dev
 HELIUS_API_KEY=your_helius_api_key_here
 
 # Cluster — "devnet" or "mainnet-beta"

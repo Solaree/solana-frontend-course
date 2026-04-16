@@ -17,64 +17,109 @@ const ENDPOINTS = [
   "https://api.devnet.solana.com",
 ];
 
+const AIRDROP_AMOUNT = 1 * LAMPORTS_PER_SOL;
+const TIMEOUT_MS = 10000;
+
+async function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const id = setTimeout(() => reject(new Error("TIMEOUT")), ms);
+    promise
+      .then((res) => {
+        clearTimeout(id);
+        resolve(res);
+      })
+      .catch((err) => {
+        clearTimeout(id);
+        reject(err);
+      });
+  });
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { address } = await req.json();
 
     if (!address) {
-      return NextResponse.json({ error: "Missing address" }, { status: 400 });
+      return NextResponse.json(
+        { error: "MISSING_ADDRESS" },
+        { status: 400 }
+      );
     }
 
     let pubkey: PublicKey;
     try {
       pubkey = new PublicKey(address);
     } catch {
-      return NextResponse.json({ error: "Invalid address" }, { status: 400 });
+      return NextResponse.json(
+        { error: "INVALID_ADDRESS" },
+        { status: 400 }
+      );
     }
 
-    // Try each endpoint until one succeeds
     for (const endpoint of ENDPOINTS) {
-      try {
-        const connection = new Connection(endpoint, "confirmed");
+      const connection = new Connection(endpoint, "confirmed");
 
-        const sig = await connection.requestAirdrop(
-          pubkey,
-          1 * LAMPORTS_PER_SOL
-        );
+      // retry each endpoint 2 times
+      for (let attempt = 0; attempt < 2; attempt++) {
+        try {
+          const sig = await withTimeout(
+            connection.requestAirdrop(pubkey, AIRDROP_AMOUNT),
+            TIMEOUT_MS
+          );
 
-        // Confirm using the same connection that issued the airdrop
-        const { blockhash, lastValidBlockHeight } =
-          await connection.getLatestBlockhash("confirmed");
+          // confirm using "finalized" for stronger guarantee
+          const latest = await connection.getLatestBlockhash("finalized");
 
-        await connection.confirmTransaction(
-          { signature: sig, blockhash, lastValidBlockHeight },
-          "confirmed"
-        );
+          await withTimeout(
+            connection.confirmTransaction(
+              {
+                signature: sig,
+                blockhash: latest.blockhash,
+                lastValidBlockHeight: latest.lastValidBlockHeight,
+              },
+              "finalized"
+            ),
+            TIMEOUT_MS
+          );
 
-        return NextResponse.json({ signature: sig });
-      } catch (err) {
-        const msg = err instanceof Error ? err.message : "";
-        // If rate limited or internal error, try next endpoint
-        if (
-          msg.includes("429") ||
-          msg.includes("Internal error") ||
-          msg.includes("union of") ||
-          msg.includes("faucet")
-        ) {
-          continue;
+          return NextResponse.json({
+            signature: sig,
+            amount: AIRDROP_AMOUNT / LAMPORTS_PER_SOL,
+          });
+        } catch (err: any) {
+          const msg = err?.message || "";
+
+          // structured handling
+          if (msg === "TIMEOUT") {
+            continue;
+          }
+
+          if (
+            msg.includes("429") ||
+            msg.toLowerCase().includes("rate") ||
+            msg.toLowerCase().includes("faucet")
+          ) {
+            // try next endpoint
+            break;
+          }
+
+          // unknown error → don't silently retry forever
+          throw err;
         }
-        // Other errors (invalid address etc) — don't retry
-        throw err;
       }
     }
 
-    // All endpoints exhausted
     return NextResponse.json(
-      { error: "All faucets rate-limited. Try again in a few minutes or use Faucet (https://faucet.solana.com)" },
+      { error: "RATE_LIMITED" },
       { status: 429 }
     );
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Airdrop failed";
-    return NextResponse.json({ error: message }, { status: 500 });
+    const message =
+      err instanceof Error ? err.message : "AIRDROP_FAILED";
+
+    return NextResponse.json(
+      { error: message },
+      { status: 500 }
+    );
   }
 }

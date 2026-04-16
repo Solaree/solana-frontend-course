@@ -48,7 +48,7 @@ Open [http://localhost:3000](http://localhost:3000), connect Phantom or Backpack
 | `NEXT_PUBLIC_RPC_URL` | No | RPC endpoint — defaults to public devnet. Set to `/api/rpc` in production. |
 | `HELIUS_API_KEY` | No | Server-side only — powers `/api/rpc` proxy and `/api/airdrop` fallback |
 
-Get a free Helius API key at [helius.xyz](https://helius.xyz).
+Get a free Helius API key at [helius.dev](https://helius.dev).
 
 > **Never commit `.env.local`** — it's in `.gitignore` by default.
 
@@ -125,7 +125,7 @@ await program.methods.myInstruction(arg).accounts({ ... }).rpc();
 ```bash
 # .env.local
 NEXT_PUBLIC_CLUSTER=mainnet-beta
-NEXT_PUBLIC_RPC_URL=https://rpc.helius.xyz/?api-key=YOUR_KEY
+NEXT_PUBLIC_RPC_URL=https://mainnet.helius-rpc.com/?api-key=YOUR_KEY
 ```
 
 The cluster badge disappears automatically on mainnet.

@@ -1,3 +1,7 @@
+---
+marp: true
+---
+
 # Lecture 2 — Reading Blockchain State & Token Data
 
 **Duration:** ~90 minutes  
@@ -19,6 +23,8 @@ The Solana RPC API exposes everything on-chain. Key methods:
 | `getTransaction` | Full transaction details |
 | `getProgramAccounts` | All accounts owned by a program |
 
+---
+
 ### Choosing an RPC provider
 
 Public endpoints (`api.devnet.solana.com`) are rate-limited and unreliable for production. Use a provider:
@@ -30,9 +36,11 @@ Public endpoints (`api.devnet.solana.com`) are rate-limited and unreliable for p
 | **Alchemy** | 300M compute units/month | Familiar if coming from EVM |
 | **Triton** | Pay-as-you-go | Low-latency, bare-metal |
 
+---
+
 ```ts
 // .env.local
-NEXT_PUBLIC_RPC_URL=https://rpc.helius.xyz/?api-key=YOUR_KEY
+NEXT_PUBLIC_RPC_URL=https://mainnet.helius-rpc.com/?api-key=YOUR_KEY
 
 // src/lib/solana.ts
 import { Connection } from "@solana/web3.js";

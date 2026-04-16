@@ -1,3 +1,7 @@
+---
+marp: true
+---
+
 # Lecture 1 — Solana Frontend Foundations
 
 **Duration:** ~90 minutes  
@@ -30,9 +34,11 @@ In a Web2 app, a user's data lives in a database row keyed by a user ID. Your ba
 - `data` — arbitrary bytes interpreted by the owning program
 - `executable` — whether the account contains a program
 
+---
+
 ```
 ┌─────────────────────────────────────────────┐
-│  Account: 7xKXtg2CW87d97TXJSDpbD5jBkheTqA1yd │
+│ Account: 7xKXtg2CW87d97TXJSDpbD5jBkheTqA1yd │
 ├──────────────┬──────────────────────────────┤
 │ lamports     │ 2_500_000_000 (2.5 SOL)      │
 │ owner        │ System Program               │
@@ -65,6 +71,8 @@ solana --version
 # Set to devnet for development
 solana config set --url devnet
 ```
+
+---
 
 ### Wallet browser extension
 
@@ -113,8 +121,10 @@ const devnetConn = new Connection(clusterApiUrl("devnet"), "confirmed");
 const mainnetConn = new Connection(clusterApiUrl("mainnet-beta"), "confirmed");
 
 // With a paid RPC (Helius, QuickNode, Alchemy)
-const conn = new Connection("https://rpc.helius.xyz/?api-key=YOUR_KEY", "confirmed");
+const conn = new Connection("https://mainnet.helius-rpc.com/?api-key=YOUR_KEY", "confirmed");
 ```
+
+---
 
 The second argument is the **commitment level**:
 
@@ -123,6 +133,8 @@ The second argument is the **commitment level**:
 | `processed` | Seen by one node | Fast reads that don't need finality |
 | `confirmed` | Confirmed by supermajority | Default — balance reads, UI updates |
 | `finalized` | Irreversible | Payment confirmations |
+
+---
 
 ### PublicKey
 
@@ -139,6 +151,8 @@ const [pda, bump] = PublicKey.findProgramAddressSync(
   programId
 );
 ```
+
+---
 
 ### Reading a SOL balance
 
@@ -157,6 +171,8 @@ async function getSolBalance(conn: Connection, address: string): Promise<number>
 ## 6. Wallet Adapter — Wiring Up the Provider
 
 The wallet adapter ecosystem abstracts over Phantom, Backpack, Solflare, and dozens of other wallets. You write one integration; it works with all of them.
+
+---
 
 ### The provider hierarchy
 
@@ -181,7 +197,11 @@ import "@solana/wallet-adapter-react-ui/styles.css";
 interface Props {
   children: React.ReactNode;
 }
+```
 
+---
+
+```ts
 export function SolanaProvider({ children }: Props) {
   const network = WalletAdapterNetwork.Devnet;
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
@@ -219,6 +239,8 @@ export function SolanaProvider({ children }: Props) {
 }
 ```
 
+---
+
 ```tsx
 // src/app/layout.tsx
 import { SolanaProvider } from "@/components/providers/solana-provider";
@@ -246,7 +268,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 ```tsx
 import { useWallet } from "@solana/wallet-adapter-react";
-
 function WalletStatus() {
   const {
     publicKey,      // PublicKey | null — the connected wallet's address
@@ -259,13 +280,13 @@ function WalletStatus() {
     sendTransaction, // preferred — signs + sends in one call
     wallet,         // the active WalletAdapter instance
   } = useWallet();
-
   if (connecting) return <p>Connecting...</p>;
   if (!connected) return <button onClick={connect}>Connect Wallet</button>;
-
   return <p>Connected: {publicKey?.toBase58()}</p>;
 }
 ```
+
+---
 
 ### `useConnection()`
 
@@ -301,7 +322,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+```
 
+---
+
+```tsx
 function truncateAddress(address: string, chars = 4): string {
   if (address.length <= chars * 2 + 3) return address;
   return `${address.slice(0, chars)}...${address.slice(-chars)}`;
@@ -344,7 +369,11 @@ export function WalletButton() {
       </Button>
     );
   }
+```
 
+---
+
+```tsx
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

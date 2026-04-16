@@ -24,7 +24,7 @@ A production-ready Next.js 15 dApp scaffold for the [Colosseum Hackathon](https:
 
 ```bash
 # 1. Clone or copy this directory
-git clone https://github.com/YOUR_ORG/solana-frontend-course
+git clone https://github.com/veuxsu/solana-frontend-course
 cd toolkit/starter-template
 
 # 2. Install dependencies

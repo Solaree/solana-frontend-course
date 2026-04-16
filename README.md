@@ -22,10 +22,10 @@ A 4-lecture hands-on module for frontend developers transitioning from Web2 to b
 
 | # | Lecture | Focus |
 |---|---------|-------|
-| 1 | [Solana Frontend Foundations](./lectures/lecture-01-foundations/README.md) | Wallet connection, account model, first dApp |
-| 2 | [Reading Blockchain State](./lectures/lecture-02-reading-state/README.md) | Balances, tokens, real-time subscriptions |
-| 3 | [Building & Sending Transactions](./lectures/lecture-03-transactions/README.md) | Transaction anatomy, program calls, error handling |
-| 4 | [Production-Ready dApps](./lectures/lecture-04-production/README.md) | State management, performance, security, deployment |
+| 1 | [Solana Frontend Foundations](./lectures/lecture-01-foundations/README.pdf) | Wallet connection, account model, first dApp |
+| 2 | [Reading Blockchain State](./lectures/lecture-02-reading-state/README.pdf) | Balances, tokens, real-time subscriptions |
+| 3 | [Building & Sending Transactions](./lectures/lecture-03-transactions/README.pdf) | Transaction anatomy, program calls, error handling |
+| 4 | [Production-Ready dApps](./lectures/lecture-04-production/README.pdf) | State management, performance, security, deployment |
 
 ---
 
@@ -48,8 +48,11 @@ Each lecture folder contains:
 ```
 lecture-XX-name/
 ├── README.md       ← Lecture content with code examples
+├── README.pdf      ← Compiled lecture into PDF slides
 ├── quiz.md         ← 10-question quiz with answer key
-└── assignment.md   ← Coding assignment with grading rubric
+├── quiz.pdf        ← Compiled quiz into PDF slides
+├── assignment.md   ← Coding assignment with grading rubric
+└── assignment.pdf  ← Compiled assignment into PDF slides
 ```
 
 ---

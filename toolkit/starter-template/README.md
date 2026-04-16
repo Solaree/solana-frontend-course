@@ -44,7 +44,7 @@ Open [http://localhost:3000](http://localhost:3000), connect Phantom or Backpack
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `NEXT_PUBLIC_CLUSTER` | No | `devnet` (default) or `mainnet-beta` |
+| `NEXT_PUBLIC_CLUSTER` | No | `mainnet-beta` (default) or `devnet` |
 | `NEXT_PUBLIC_RPC_URL` | No | RPC endpoint — defaults to public devnet. Set to `/api/rpc` in production. |
 | `HELIUS_API_KEY` | No | Server-side only — powers `/api/rpc` proxy and `/api/airdrop` fallback |
 

@@ -77,16 +77,3 @@ toolkit/
         │   └── wallet.ts           ← Zustand: runtime wallet state + persisted user preferences
         └── lib/                    ← format.ts, jupiter.ts, solana.ts, utils.ts
 ```
-
----
-
-## Lecture resources
-
-Each lecture links to the starter template and extends it:
-
-| Lecture | Template connection |
-|---------|-------------------|
-| [01 — Foundations](../lectures/lecture-01-foundations/) | Builds `SolanaProvider` + `WalletButton` from scratch |
-| [02 — Reading State](../lectures/lecture-02-reading-state/) | Adds `useTokenAccounts`, React Query, subscriptions |
-| [03 — Transactions](../lectures/lecture-03-transactions/) | Adds `SendSolForm`, priority fees, simulation |
-| [04 — Production](../lectures/lecture-04-production/) | Adds RPC proxy, ErrorBoundary, security hardening |

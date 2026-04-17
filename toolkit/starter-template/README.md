@@ -28,14 +28,14 @@ git clone https://github.com/veuxsu/solana-frontend-course
 cd toolkit/starter-template
 
 # 2. Install dependencies
-npm install --legacy-peer-deps
+pnpm install --legacy-peer-deps
 
 # 3. Configure environment
 cp .env.example .env.local
 # Edit .env.local — add your RPC URL
 
 # 4. Start dev server
-npm run dev
+pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000), connect Phantom or Backpack, and you're live.

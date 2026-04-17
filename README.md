@@ -37,7 +37,7 @@ The [`toolkit/`](./toolkit/README.md) directory contains plug-and-play starter t
 |----------|-----------------|
 | [starter-template](./toolkit/starter-template/) | Full Next.js 15 dApp — wallet adapter, live SOL balance, SPL tokens, transaction history, send SOL form, **Jupiter Token Swap**, **Token Prices**, devnet airdrop, **Secure RPC proxy**, error boundaries |
 
-All templates are pre-wired and ready to `npm install --legacy-peer-deps && npm run dev`.
+All templates are pre-wired and ready to `pnpm install --legacy-peer-deps && pnpm dev`.
 
 ---
 
@@ -61,9 +61,9 @@ lecture-XX-name/
 
 ```bash
 cd toolkit/starter-template
-npm install --legacy-peer-deps
+pnpm install --legacy-peer-deps
 cp .env.example .env.local   # add your RPC URL
-npm run dev
+pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000). You'll see a wallet connect button, SOL balance, and token list — ready to extend.

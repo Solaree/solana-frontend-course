@@ -40,9 +40,9 @@ Everything a hackathon team needs on day one:
 
 ```bash
 cd toolkit/starter-template
-npm install --legacy-peer-deps
+pnpm install --legacy-peer-deps
 cp .env.example .env.local # Set Helius API key
-npm run dev
+pnpm dev
 ```
 
 **[Full documentation →](./starter-template/README.md)**

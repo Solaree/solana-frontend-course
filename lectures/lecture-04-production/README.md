@@ -11,11 +11,17 @@ marp: true
 
 ## 1. The Gap Between "Works in Demo" and "Production"
 
+<!-- _class: small-text -->
+
+<style>
+section.small-text {
+  font-size: 2.1em;
+}
+</style>
 Most hackathon demos work because:
 - You're on devnet with no real traffic
 - You know exactly what to click
 - Your RPC is warm and responsive
-- Nothing unexpected happens
 
 Production fails when:
 - 1000 users hit your RPC simultaneously
@@ -31,6 +37,8 @@ This lecture closes that gap.
 ## 2. State Management — Zustand for Global Wallet State
 
 React context re-renders the entire tree. For Solana dApps where wallet state changes frequently, use Zustand for state that lives outside the React tree — avoiding cascading re-renders and persisting user preferences across page loads.
+
+---
 
 ### The wallet store
 
@@ -82,10 +90,18 @@ export const useWalletStore = create<WalletStore>()(
 );
 ```
 
+---
+
 ### The sync bridge
 
 The wallet adapter owns the live connection. A small bridge component pushes its state into Zustand — that way any component can read `publicKey` or `connected` from the store without calling `useWallet()` directly, and without the intermediate re-renders that context propagation causes.
 
+<!-- _class: small-code -->
+<style>
+section.small-code pre {
+  font-size: 0.48em;
+}
+</style>
 ```tsx
 // src/components/providers/wallet-sync.tsx
 "use client";
@@ -111,6 +127,8 @@ export function WalletSync() {
 }
 ```
 
+---
+
 Mount it inside `WalletProvider` so it has access to `useWallet()`:
 
 ```tsx
@@ -122,6 +140,8 @@ Mount it inside `WalletProvider` so it has access to `useWallet()`:
   </WalletModalProvider>
 </WalletProvider>
 ```
+
+---
 
 ### Consuming the store
 
@@ -168,6 +188,8 @@ export async function POST(req: NextRequest) {
 }
 ```
 
+---
+
 ```ts
 // src/lib/solana.ts
 import { clusterApiUrl } from "@solana/web3.js";
@@ -184,6 +206,8 @@ export const RPC_ENDPOINT: string =
     ? `${window.location.origin}/api/rpc`
     : clusterApiUrl(CLUSTER);
 ```
+
+---
 
 ### Fallback RPC chain
 
@@ -270,6 +294,8 @@ export class ErrorBoundary extends Component<Props, State> {
 }
 ```
 
+---
+
 ### Wrapping routes
 
 ```tsx
@@ -299,6 +325,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 For fast-feeling UX, update the UI immediately and roll back on failure.
 
+
+<!-- _class: small-code -->
+<style>
+section.small-code pre {
+  font-size: 0.4em;
+}
+</style>
 ```tsx
 // src/hooks/use-optimistic-balance.ts
 import { useQueryClient } from "@tanstack/react-query";
@@ -356,6 +389,8 @@ function Component() {
 }
 ```
 
+---
+
 ### Problem: Fetching accounts one at a time
 
 ```ts
@@ -379,6 +414,8 @@ queryKey: ["balance", publicKey?.toBase58(), Date.now()]
 // GOOD — stable key
 queryKey: ["balance", publicKey?.toBase58()]
 ```
+
+---
 
 ### Problem: WebSocket leaks
 
@@ -416,6 +453,8 @@ const sig = validateSignature(userInput); // sanitize first
 const url = `https://explorer.solana.com/tx/${sig}`;
 ```
 
+---
+
 ### Never auto-sign
 
 ```ts
@@ -424,6 +463,8 @@ wallet.signAllTransactions(pendingTxs);
 
 // GOOD — every signature is a deliberate user action
 ```
+
+---
 
 ### Signature verification (server-side gating)
 
@@ -447,6 +488,8 @@ function verifySignature(
 }
 ```
 
+---
+
 ### Environment variables — what goes where
 
 | Variable | Prefix | Exposed to? |
@@ -462,6 +505,12 @@ function verifySignature(
 
 When the user disconnects or switches to a different wallet, all React Query cache must be cleared — otherwise the UI leaks the previous wallet's balances and history into the new session.
 
+<!-- _class: small-code -->
+<style>
+section.small-code pre {
+  font-size: 0.49em;
+}
+</style>
 ```tsx
 // src/hooks/use-wallet-cache-clear.ts
 "use client";
@@ -487,6 +536,8 @@ export function useWalletCacheClear() {
   }, [publicKey, queryClient]);
 }
 ```
+
+---
 
 Call it once inside `QueryProvider` so it's always active:
 
@@ -530,6 +581,8 @@ function WalletCacheClear() {
 <DropdownMenuTrigger aria-label={`Wallet connected: ${truncateAddress(publicKey)}`}>
 ```
 
+---
+
 ### Transaction status — live region
 
 ```tsx
@@ -560,6 +613,12 @@ function WalletCacheClear() {
 
 ### Environment variables
 
+<!-- _class: small-code -->
+<style>
+section.small-code pre {
+  font-size: 0.65em;
+}
+</style>
 ```bash
 # .env.local (development)
 NEXT_PUBLIC_RPC_URL=https://api.devnet.solana.com
@@ -584,6 +643,8 @@ pnpm build
 grep -r "api-key\|apikey\|secret\|password" .env* --include="*.ts" --include="*.tsx"
 ```
 
+---
+
 ### Network indicator — never forget which cluster
 
 ```tsx
@@ -604,6 +665,8 @@ export function ClusterBadge() {
   );
 }
 ```
+
+---
 
 ### Vercel deployment
 
@@ -628,6 +691,12 @@ vercel --prod
 
 ### Unit tests for pure functions
 
+<!-- _class: small-code -->
+<style>
+section.small-code pre {
+  font-size: 0.7em;
+}
+</style>
 ```ts
 // src/lib/__tests__/format.test.ts
 import { truncateAddress, formatTokenAmount } from "@/lib/format";
@@ -650,6 +719,8 @@ const connection = new Connection("https://api.devnet.solana.com");
 const balance = await connection.getBalance(new PublicKey(TEST_WALLET));
 expect(balance).toBeGreaterThanOrEqual(0);
 ```
+
+---
 
 ### Component tests
 

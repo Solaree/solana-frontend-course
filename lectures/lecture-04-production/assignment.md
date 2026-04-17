@@ -29,6 +29,8 @@ Take your previous assignments and transform the best features into a production
    - "Try again" button that resets the boundary
    - Console log of the caught error
 
+---
+
 3. **Wallet change detection**:
    - When the user disconnects or switches wallets, all React Query cache is cleared
    - No stale data from the previous wallet leaks into the new session
@@ -38,6 +40,8 @@ Take your previous assignments and transform the best features into a production
    - Mainnet shows nothing (or a neutral indicator)
    - Switching clusters (if supported) clears the cache
 
+---
+
 5. **Accessibility review** — fix all of:
    - Every interactive element uses `<button>` or `<a>`, never `<div onClick>`
    - All inputs have visible `<label>` elements
@@ -46,6 +50,8 @@ Take your previous assignments and transform the best features into a production
    - Touch targets are ≥ 40px tall
 
 6. **Environment variable documentation** — a `.env.example` file that lists every variable with a comment explaining what it is and where to get it
+
+---
 
 ### Stretch goals
 
@@ -58,6 +64,8 @@ Take your previous assignments and transform the best features into a production
 8. **Error monitoring** — integrate Sentry (free tier):
    - Errors from `ErrorBoundary.componentDidCatch` are sent to Sentry
    - Transaction failures are captured as Sentry events with the signature attached
+
+---
 
 9. **E2E test** — write one Playwright test that:
    - Loads the app
@@ -124,6 +132,11 @@ SENTRY_DSN=your_sentry_dsn_here
 | Cluster badge (devnet shows, mainnet hidden) | 10 | Correct on both clusters |
 | All 5 accessibility checks pass | 20 | Keyboard nav, labels, focus rings, aria-live, touch targets |
 | `.env.example` present and documented | 5 | Every variable explained |
+
+---
+
+| Criterion | Points | Notes |
+|-----------|--------|-------|
 | `pnpm build` passes with no errors | 10 | CI-ready |
 | No TypeScript errors | 5 | `pnpm tsc --noEmit` |
 | **Total** | **100** | |
@@ -142,6 +155,9 @@ Before submitting, verify:
 - [ ] `pnpm tsc --noEmit` passes
 - [ ] API key is NOT in the browser bundle (check `pnpm build` output in `.next/static/chunks/`)
 - [ ] Wallet switch → old data cleared (manually test: connect Wallet A, check balance, switch to Wallet B, verify balance updates)
+
+---
+
 - [ ] Devnet badge visible in dev, hidden on mainnet
 - [ ] All form inputs have visible labels
 - [ ] Tab key navigates through all interactive elements in logical order

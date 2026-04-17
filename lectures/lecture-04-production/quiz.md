@@ -109,11 +109,16 @@ marp: true
 | 3 | **B** | On wallet change, call `queryClient.clear()` to discard all cached data scoped to the previous wallet. |
 | 4 | **C** | `static getDerivedStateFromError(error)` returns new state when an error is caught. `componentDidCatch` is for side effects (logging). |
 | 5 | **B** | Roll back the UI and show an inline error at the point of action. A toast alone isn't enough — the user needs to see the state revert. |
+
+---
+
+| Q | Answer | Explanation |
+|---|--------|-------------|
 | 6 | **C** | `tabular-nums` forces each digit to occupy equal horizontal space, preventing layout shifts as numbers change. |
 | 7 | **C** | `aria-live="polite"` on a container announces text changes to screen readers without interrupting current speech. `role="alert"` is for urgent messages. |
 | 8 | **A** | Show a cluster badge for devnet/testnet. On mainnet, suppress it — mainnet is the expected environment. |
 | 9 | **B** | WCAG and platform guidelines require ≥ 40×40 px touch targets. 24 px icons need padding to reach this. |
-| 10 | **C** | `connection` from `useConnection()` is stable, but if a component creates `new Connection()` in the body, each render gets a new reference, which invalidates `useEffect` dependencies and causes cascading re-renders. |
+| 10 | **C** | `connection` from `useConnection()` is stable, but if a component creates `new Connection()` in the body, each render gets a new reference, which invalidates `useEffect` dependencies. |
 
 ---
 

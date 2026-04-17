@@ -26,6 +26,8 @@ Transaction
 │       └── data           ← serialized instruction data
 ```
 
+---
+
 ### Key concepts
 
 | Concept | What it means |
@@ -91,10 +93,18 @@ export async function buildSolTransferTx(
 }
 ```
 
+---
+
 ### Sending with the wallet adapter
 
 The wallet adapter's `sendTransaction` method handles signing + submission in one step:
 
+<!-- _class: small-code -->
+<style>
+section.small-code pre {
+  font-size: 0.47em;
+}
+</style>
 ```tsx
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
@@ -123,7 +133,6 @@ function useSolTransfer() {
 
     return signature;
   }
-
   return { transfer };
 }
 ```
@@ -136,6 +145,12 @@ Solana transactions compete for inclusion in blocks. **Priority fees** (measured
 
 ### Always set compute unit limits
 
+<!-- _class: small-code -->
+<style>
+section.small-code pre {
+  font-size: 0.51em;
+}
+</style>
 ```ts
 import {
   ComputeBudgetProgram,
@@ -159,6 +174,8 @@ function addPriorityFee(tx: Transaction, options?: {
   return tx;
 }
 ```
+
+---
 
 ### Estimating priority fees dynamically
 
@@ -197,6 +214,8 @@ buildTx() → signTx() → sendRawTx() → confirmTx()
   Building     Wallet     Submitted      Confirmed
                popup      (pending)
 ```
+
+---
 
 ### Robust confirmation with retry
 
@@ -239,6 +258,7 @@ export async function confirmTransactionWithRetry(
 ## 6. Transaction Simulation — Show Results Before Signing
 
 Never send a transaction the user hasn't seen the result of.
+
 
 ```ts
 import { Connection, Transaction, PublicKey } from "@solana/web3.js";
@@ -286,6 +306,12 @@ export async function simulateTransaction(
 ## 7. The Full Send Flow — Hook + UI
 
 ### The hook
+<!-- _class: small-code -->
+<style>
+section.small-code pre {
+  font-size: 0.265em;
+}
+</style>
 
 ```tsx
 // src/hooks/use-send-transaction.ts
@@ -341,6 +367,8 @@ export function useSendTransaction() {
   return { send, status, isLoading: status === "awaiting-approval" || status === "confirming" };
 }
 ```
+
+---
 
 ### The UI
 
@@ -470,7 +498,20 @@ export function SendSolForm() {
 
 ## 8. Calling On-Chain Programs — Anchor
 
+
 Most Solana programs are built with Anchor, which generates a typed client from an IDL (Interface Definition Language) file.
+
+<!-- _class: small-code -->
+<style>
+pre code.language-bash {
+  font-size: 22px;
+  font-weight: 600;
+}
+section.small-code pre:has(code.language-ts),
+section.small-code pre:has(code.language-tsx) {
+  font-size: 0.36em;
+}
+</style>
 
 ```bash
 pnpm add @coral-xyz/anchor
@@ -507,6 +548,8 @@ export function getProgram(provider: AnchorProvider) {
   );
 }
 ```
+
+---
 
 ### Calling a program instruction
 
@@ -550,6 +593,8 @@ Common errors and how to handle them in the UI:
 | `insufficient funds` | Not enough SOL for fee | "You need more SOL to cover the transaction fee" |
 | `Transaction simulation failed` | Program rejected | Decode from logs |
 | `0x1` (custom program error) | Check IDL error codes | Map to human message |
+
+---
 
 ```ts
 function decodeTransactionError(err: unknown): string {
@@ -601,6 +646,8 @@ async function getSwapQuote(
 }
 ```
 
+---
+
 ### Building the Transaction (via Proxy)
 
 ```tsx
@@ -614,6 +661,8 @@ async function buildSwapTx(quote: JupiterQuote, userPublicKey: string) {
   return swapTransaction; // base64-encoded VersionedTransaction
 }
 ```
+
+---
 
 ### Deserializing and sending
 

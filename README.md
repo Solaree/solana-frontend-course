@@ -70,6 +70,12 @@ Open [http://localhost:3000](http://localhost:3000). You'll see a wallet connect
 
 ---
 
+## FAQ
+
+Common questions (setup, wallets, RPC, errors, workflow) → [FAQ.md](./FAQ.md)
+
+---
+
 ## Stack Used Throughout
 
 - **Next.js 15** (App Router) + TypeScript

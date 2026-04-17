@@ -28,6 +28,14 @@ Everything a hackathon team needs on day one:
 | Error states | ErrorBoundary + per-component retry |
 | Dark theme | WCAG AA, Solana purple accent |
 
+**Testing & CI:**
+
+| Command | What it does |
+|---------|-------------|
+| `pnpm test` | Unit tests (format utilities) + integration tests (real devnet RPC, no mocks) |
+| `pnpm test:watch` | Watch mode |
+| Push to `main` | GitHub Actions runs type check → build → tests automatically |
+
 **Quick start — 3 commands:**
 
 ```bash
@@ -55,6 +63,8 @@ toolkit/
     ├── tailwind.config.js
     ├── postcss.config.js
     ├── tsconfig.json
+    ├── vitest.config.ts            ← Vitest config (jsdom, @/* alias, 30s timeout)
+    ├── vitest.setup.ts             ← Test setup (jest-dom matchers)
     └── src/
         ├── app/
         │   ├── api/
@@ -75,5 +85,8 @@ toolkit/
         │                              useSwap, useTransactionHistory, useWalletCacheClear, useTokenPrices
         ├── store/
         │   └── wallet.ts           ← Zustand: runtime wallet state + persisted user preferences
-        └── lib/                    ← format.ts, jupiter.ts, solana.ts, utils.ts
+        ├── __tests__/              ← Integration tests (real devnet RPC, no mocks)
+        └── lib/
+            ├── __tests__/          ← Unit tests (format utilities)
+            ├── format.ts, jupiter.ts, solana.ts, utils.ts
 ```

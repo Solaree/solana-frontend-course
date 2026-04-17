@@ -97,6 +97,46 @@ src/
     └── utils.ts                # cn() Tailwind merge helper
 ```
 
+## Testing
+
+The template ships with [Vitest](https://vitest.dev) + [Testing Library](https://testing-library.com) and two test suites.
+
+```bash
+# Run all tests once
+pnpm test
+
+# Watch mode — re-runs on file changes
+pnpm test:watch
+```
+
+### Unit tests (`src/lib/__tests__/format.test.ts`)
+
+Pure-function coverage for `truncateAddress`, `formatTokenAmount`, `formatUsd`, `formatRelativeTime`, `parsePublicKey`, `decodeTransactionError`, and explorer URL helpers.
+
+### Integration tests (`src/__tests__/rpc-integration.test.ts`)
+
+Hit real devnet — no mocks. Tests `getBalance`, `getLatestBlockhash`, `getSlot`, and `getEpochInfo` against `https://api.devnet.solana.com`.
+
+> **Why no mocks?** Mock RPC diverges from prod — a mocked test suite can pass while the real RPC response shape has changed. See Lecture 4, Section 11.
+
+### Adding your own tests
+
+| Type | Location | Example |
+|------|----------|---------|
+| Pure functions | `src/lib/__tests__/` | `format.test.ts` |
+| RPC integration | `src/__tests__/` | `rpc-integration.test.ts` |
+| Components | `src/components/__tests__/` | Use `@testing-library/react` |
+
+## CI
+
+A GitHub Actions workflow (`.github/workflows/ci.yml`) runs on every push or PR to `main` that touches `toolkit/starter-template/`:
+
+1. `pnpm tsc --noEmit` — type check
+2. `pnpm build` — Next.js production build
+3. `pnpm test` — unit + integration tests
+
+Results appear in the **Actions** tab on GitHub.
+
 ## Extending the template
 
 ### Add a new program interaction
@@ -129,6 +169,18 @@ NEXT_PUBLIC_RPC_URL=https://devnet.helius-rpc.com/?api-key=YOUR_KEY
 ```
 
 The cluster badge disappears automatically on mainnet.
+
+## Available scripts
+
+| Script | Command | Description |
+|--------|---------|-------------|
+| `dev` | `pnpm dev` | Start Next.js dev server |
+| `build` | `pnpm build` | Production build |
+| `start` | `pnpm start` | Serve production build |
+| `lint` | `pnpm lint` | ESLint check |
+| `type-check` | `pnpm type-check` | `tsc --noEmit` |
+| `test` | `pnpm test` | Run all tests once |
+| `test:watch` | `pnpm test:watch` | Run tests in watch mode |
 
 ## Stack
 

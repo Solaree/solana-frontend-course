@@ -69,6 +69,8 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000). You'll see a wallet connect button, SOL balance, and token list — ready to extend.
 
+You can also check the mainnet-ready deployment [here](https://starter-template-gold.vercel.app)
+
 ---
 
 ## FAQ

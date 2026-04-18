@@ -38,7 +38,7 @@ export async function preloadTokenIcons(mints: string[]) {
   const promises = mints.map(async (mint) => {
     if (tokenIconCache.has(mint)) return;
     try {
-      const res = await fetch(`https://api.jup.ag/tokens/v2/search?query=${mint}`);
+      const res = await fetch(`https://lite-api.jup.ag/tokens/v2/search?query=${mint}`);
       const data = await res.json();
       const token = data.find((t: any) => t.id === mint);
       if (token?.icon) tokenIconCache.set(mint, token.icon);

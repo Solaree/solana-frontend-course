@@ -19,7 +19,7 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       // Jupiter token icon CDN
-      { protocol: "https", hostname: "api.jup.ag" },
+      { protocol: "https", hostname: "lite-api.jup.ag" },
       // Fallback sources
       { protocol: "https", hostname: "raw.githubusercontent.com" },
       { protocol: "https", hostname: "arweave.net" },

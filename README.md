@@ -1,4 +1,5 @@
 # Solana Frontend Development — Colosseum Hackathon Course
+![](https://github-production-user-asset-6210df.s3.amazonaws.com/115794865/580292416-67c229ed-e1fb-4b46-bff9-e7bae57c8249.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20260418%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260418T085016Z&X-Amz-Expires=300&X-Amz-Signature=d2e9dabaa4a40bea9a287a8df7777ab51be356591dab61592460c24332d41b06&X-Amz-SignedHeaders=host&response-content-type=image%2Fpng)
 
 A 4-lecture hands-on module for frontend developers transitioning from Web2 to building production-ready Solana dApps. Every lecture comes with working code examples, a quiz, and a coding assignment.
 

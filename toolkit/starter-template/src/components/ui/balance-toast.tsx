@@ -45,13 +45,15 @@ const KIND_CONFIG: Record<
     accent: "bg-primary/80",
     amountTone: "text-foreground/90",
   },
-  // Withdrawn from a protocol → soft amber (positive cashflow but a
-  // protocol exit, distinct from a generic incoming transfer).
+  // Withdrawn from the wallet (e.g. JitoSOL leaving the wallet during a
+  // Jito unstake swap). Soft amber accent so it reads as "neutral exit"
+  // rather than the primary-coloured "deposited into a protocol" toast.
+  // Negative sign mirrors `deposited` since the wallet balance dropped.
   withdrawn: {
     label: "Withdrawn",
-    sign: "+",
+    sign: "−",
     accent: "bg-amber-500/80",
-    amountTone: "text-foreground",
+    amountTone: "text-foreground/90",
   },
 };
 

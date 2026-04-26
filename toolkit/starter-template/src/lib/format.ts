@@ -135,6 +135,24 @@ export function decodeTransactionError(err: unknown): string {
   if (err.message.includes("insufficient funds")) {
     return "Not enough SOL to cover this transaction and its fee.";
   }
+  // Solana's "no record of a prior credit" actually means the wallet's SOL
+  // balance can't cover what the transaction is debiting — usually deposit
+  // amount + ATA rent + first-time PDA rents. Logs come back empty because
+  // it dies at the first ix.
+  if (err.message.includes("no record of a prior credit")) {
+    return "Not enough SOL — this transaction needs the deposit amount plus ~0.025 SOL for account rent and fees.";
+  }
+  // Kamino's first-time deposit creates a Farms `UserState` PDA mid-tx
+  // (after the deposit amount has already been moved to wSOL), so the
+  // wallet runs dry on rent for the farm account specifically. Surface
+  // it as a clear "leave more SOL" hint rather than the raw lamport error.
+  if (
+    err.message.includes("Transfer: insufficient lamports") ||
+    (err.message.includes("InitObligationFarmsForReserve") &&
+      err.message.includes("custom program error: 0x1"))
+  ) {
+    return "Not enough SOL left after the deposit. Kamino's first-time setup needs ~0.06 SOL free for account rent — try a smaller amount or use the Max button after switching protocols.";
+  }
   if (err.message.includes("SlippageToleranceExceeded")) {
     return "Price moved too much. Try raising your slippage tolerance and retry.";
   }

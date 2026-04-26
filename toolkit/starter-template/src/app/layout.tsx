@@ -6,6 +6,7 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 import { SolanaProvider } from "@/components/providers/solana-provider";
 import { QueryProvider } from "@/components/providers/query-provider";
+import { BalanceTopUpWatcher } from "@/components/providers/balance-topup-watcher";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import "./globals.css";
 
@@ -24,6 +25,7 @@ export default function RootLayout({
       <body className="font-sans antialiased">
         <SolanaProvider>
           <QueryProvider>
+            <BalanceTopUpWatcher />
             <ErrorBoundary>
               {children}
             </ErrorBoundary>

@@ -144,28 +144,41 @@ export function useSwapExecution() {
           preflightCommitment: "confirmed",
         });
 
-        // 5. Confirm — first via the normal blockhash-based path, then
-        //    fall back to polling signature status if that throws
-        //    (e.g. blockhash expired, websocket dropped). The tx may
-        //    already be on-chain even when confirmTransaction rejects.
+        // 5. Confirm — race websocket-based confirmation against REST polling.
+        //    `connection.confirmTransaction` is fast when the websocket
+        //    delivers, but on public/flaky RPCs the `signatureSubscribe`
+        //    push often never fires for "confirmed"-level events even after
+        //    the tx lands. Without polling as a backstop, the call sits
+        //    forever and the UI gets stuck on "Confirming…" even though the
+        //    tx is on-chain and balances have already updated.
         const { blockhash, lastValidBlockHeight } =
           await connection.getLatestBlockhash("confirmed");
 
-        let onChainErr: unknown | undefined;
-        try {
-          const result = await connection.confirmTransaction(
+        const confirmPromise = connection
+          .confirmTransaction(
             { signature: sig, blockhash, lastValidBlockHeight },
             "confirmed"
-          );
-          onChainErr = result.value.err;
-        } catch {
-          onChainErr = await pollSignatureStatus(connection, sig);
+          )
+          .then((r) => r.value.err as unknown);
+
+        const pollPromise = pollSignatureStatus(connection, sig, 60_000, 1500);
+
+        let onChainErr: unknown | undefined;
+        try {
+          // Promise.race resolves with whichever observer sees the tx first.
+          // If confirmTransaction throws (blockhash expired, ws dropped),
+          // the race rejects and we fall through to a final poll.
+          onChainErr = await Promise.race([confirmPromise, pollPromise]);
           if (onChainErr === undefined) {
-            // Tx never showed up — genuine failure.
+            // Poll's 60s deadline lapsed before either path saw the tx.
             throw new Error(
               "Swap submitted but never confirmed. Check the explorer."
             );
           }
+        } catch (e) {
+          // confirmTransaction rejected — give the poll one last chance.
+          onChainErr = await pollPromise;
+          if (onChainErr === undefined) throw e;
         }
 
         // Refresh balances, token accounts, and history even on on-chain
@@ -200,18 +213,10 @@ export function useSwapExecution() {
 
         setStatus("confirmed");
 
-        toast.success("Swap confirmed!", {
-          action: {
-            label: "View on Explorer",
-            onClick: () =>
-              window.open(
-                explorerTxUrl(sig, CLUSTER),
-                "_blank",
-                "noreferrer"
-              ),
-          },
-        });
-
+        // Success is announced by the balance top-up notifier (which fires
+        // when the wallet's token balances actually update). Skipping a
+        // separate "Swap confirmed!" toast keeps the UI from double-toasting
+        // the same event.
         return sig;
       } catch (err) {
         const message = decodeTransactionError(err);

@@ -5,6 +5,7 @@ import { TokenList } from "@/components/portfolio/token-list";
 import { TransactionHistory } from "@/components/portfolio/transaction-history";
 import { SendSolForm } from "@/components/transactions/send-sol-form";
 import { SwapForm } from "@/components/transactions/swap-form";
+import { LendingForm } from "@/components/transactions/lending-form";
 import { ClusterBadge } from "@/components/ui/cluster-badge";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 
@@ -86,6 +87,9 @@ export default function Home() {
             </ErrorBoundary>
             <ErrorBoundary>
               <SwapForm />
+            </ErrorBoundary>
+            <ErrorBoundary>
+              <LendingForm />
             </ErrorBoundary>
           </div>
         </div>
